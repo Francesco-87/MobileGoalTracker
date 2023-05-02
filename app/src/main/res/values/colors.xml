@@ -2,4 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="greeting">#D8E16A92</color>
+    <color name="btnMainActivity">#D8E8A2BA</color>
 </resources>

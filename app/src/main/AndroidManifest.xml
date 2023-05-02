@@ -13,6 +13,15 @@
         android:theme="@style/Theme.MobileGoalTracker"
         tools:targetApi="31">
         <activity
+            android:name=".ManageWorkouts"
+            android:exported="false" />
+        <activity
+            android:name=".Performance"
+            android:exported="false" />
+        <activity
+            android:name=".Planning"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

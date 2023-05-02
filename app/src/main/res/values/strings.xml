@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MobileGoalTracker</string>
-</resources>
+
+    <string name="greeting"> Good morning Jane</string>
+    <string name="planning"> Planning</string>
+    <string name="performance">Performance</string>
+    <string name="workouts">Manage Workouts</string>
+
+   </resources>
