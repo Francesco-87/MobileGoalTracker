@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="greeting">#D8E16A92</color>
+    <color name="btnMainActivity">#D8E8A2BA</color>
+
+    <color name="popUpGrey">#6BD3C6C6</color>
+    <color name="goal">#FF9800</color>
+    <color name="addButton">#FF6B3D</color>
 </resources>
