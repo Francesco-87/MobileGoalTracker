@@ -22,7 +22,7 @@
         app:srcCompat="@drawable/plus_g6505a90b7_1280" />
 
     <ImageButton
-        android:id="@+id/imgBtnReturnFromPerformance"
+        android:id="@+id/imgBtnReturnFromPlanning"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
