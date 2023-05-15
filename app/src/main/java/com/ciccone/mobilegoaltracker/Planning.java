@@ -34,7 +34,7 @@ public class Planning extends AppCompatActivity {
 
     private String dateString;
     private String itemTxt;
-    private String FILENAME = "Planning.txt";
+    private String FILE_NAME = "Planning.txt";
     private TextView userInput;
     private Context context = this;
     int dateYear;
@@ -46,7 +46,7 @@ public class Planning extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_planning);
 
-//Todo implement the json filesaving and assign all views, Initiate Arraylist and workoutData class
+//TODO Create a method "Button" and logic to Save the Plan,
         //assigning the layout to variables
         returnToMain = findViewById(R.id.imgBtnReturnFromPlanning);
         addWorkoutPlanning = findViewById(R.id.fABaddWorkoutPlanning);
@@ -65,12 +65,11 @@ public class Planning extends AppCompatActivity {
         //loading the workoutDataList from storage and initiating it
         try {
 
-            if(FileManager.fileExist(context, FILENAME)){
+            if(FileManager.fileExist(context, FILE_NAME)){
                 workoutDataList = new ArrayList<WorkoutData>(
-                        JsonConversion.convertingFromJsonArray(FileManager.readFromPlanningStorage(context)));
+                        JsonConversion.convertingFromJsonArray(FileManager.readFromStorage(context, FILE_NAME)));
             }else {
                 workoutDataList = new ArrayList<WorkoutData>();
-
 
             }
 
@@ -134,8 +133,8 @@ public class Planning extends AppCompatActivity {
                             workoutDataList.add(new WorkoutData(dateString, itemTxt));
 
                             try {
-                                //Todo change methods, adjust to workout data
-                                FileManager.savePlanningToStorage(JsonConversion.convertingToJsonArray(workoutDataList), context);
+
+                                FileManager.saveToStorage(JsonConversion.convertingToJsonArray(workoutDataList), context, FILE_NAME);
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }
@@ -160,17 +159,17 @@ public class Planning extends AppCompatActivity {
     //method to find the date in the arraylist for display in the planningTextView
     private void updateTextViewCalenderActivity(){
 
-        for(int  i=0;i<workoutDataList.size();i++)
+        textViewWorkout.setText("No Plans yet");
+
+    for(int  i=0;i<workoutDataList.size();i++)
         {
             workoutData = (WorkoutData) workoutDataList.get(i);
-            if (workoutData.getDate().equals(dateString)){
+            if (dateString.equals(workoutData.getDate())){
                 textViewWorkout.setText(workoutData.getWorkoutName());
-
-            }
-            else{
-                textViewWorkout.setText("");
             }
         }
         textViewWorkout.setVisibility(View.VISIBLE);
+
+
     }
 }

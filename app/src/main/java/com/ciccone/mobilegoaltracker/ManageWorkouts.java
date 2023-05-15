@@ -19,8 +19,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONException;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class ManageWorkouts extends AppCompatActivity {
@@ -36,7 +34,7 @@ public class ManageWorkouts extends AppCompatActivity {
     private ArrayList<String> items;
     private ArrayAdapter<String> itemsAdapter;
     private Context context = this;
-    private String filename = "Workouts.txt";
+    private final String FILE_NAME = "Workouts.txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +49,9 @@ public class ManageWorkouts extends AppCompatActivity {
         itemList = findViewById(R.id.itemList);
         try {
 
-            if(FileManager.fileExist(context, filename)){
+            if(FileManager.fileExist(context, FILE_NAME)){
                 items = new ArrayList<>(
-                        JsonConversion.convertingFromJson(FileManager.readFromStorage(context)));
+                        JsonConversion.convertingFromJson(FileManager.readFromStorage(context, FILE_NAME)));
             }else {
                 items = new ArrayList<>();
             }
@@ -102,7 +100,7 @@ public class ManageWorkouts extends AppCompatActivity {
                             itemTxt = userInput.getText().toString();
                             itemsAdapter.add(itemTxt);
                             try {
-                                 FileManager.saveToStorage(JsonConversion.convertingToJSON(items), context);
+                                 FileManager.saveToStorage(JsonConversion.convertingToJSON(items), context, FILE_NAME);
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }
@@ -133,7 +131,7 @@ public class ManageWorkouts extends AppCompatActivity {
                     itemsAdapter.notifyDataSetChanged();
                     // Return true consumes the long click event (marks it handled)
                     try {
-                        FileManager.saveToStorage(JsonConversion.convertingToJSON(items), context);
+                        FileManager.saveToStorage(JsonConversion.convertingToJSON(items), context, FILE_NAME);
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
