@@ -36,6 +36,7 @@ public class ManageWorkouts extends AppCompatActivity {
     private ArrayList<String> items;
     private ArrayAdapter<String> itemsAdapter;
     private Context context = this;
+    private String filename = "Workouts.txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class ManageWorkouts extends AppCompatActivity {
         itemList = findViewById(R.id.itemList);
         try {
 
-            if(FileManager.fileExist(context)){
+            if(FileManager.fileExist(context, filename)){
                 items = new ArrayList<>(
                         JsonConversion.convertingFromJson(FileManager.readFromStorage(context)));
             }else {
