@@ -79,7 +79,7 @@ public class ManageWorkouts extends AppCompatActivity {
     //Inflating the input_workout.xml, building the alertDialog and getting the input for new Workout; Calling the JSON conversion for saving to storage
     private void addWorkout() {
         LayoutInflater li= LayoutInflater.from(this);
-        View promptsView = li.inflate(R.layout.input_workout, null);
+        View promptsView = li.inflate(R.layout.input_name, null);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 

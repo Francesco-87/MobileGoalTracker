@@ -19,12 +19,12 @@ public class FileManager  {
 
 
     // Saving the file in the internal storage with FileOutputStream
-    static void saveToStorage(String workouts, Context context, String fileName) {
+    static void saveToStorage(String s, Context context, String fileName) {
         try{
             FileOutputStream fOut = context.openFileOutput(fileName, Context.MODE_PRIVATE);
 
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fOut);
-            outputStreamWriter.write(workouts);
+            outputStreamWriter.write(s);
             outputStreamWriter.close();
 
 
@@ -69,6 +69,11 @@ public class FileManager  {
     static boolean fileExist( Context context, String filename){
         File file = context.getFileStreamPath(filename);
         return file.exists();
+    }
+
+    static boolean fileDelete(Context context, String filename){
+        File file = context.getFileStreamPath(filename);
+        return file.delete();
     }
 
 }

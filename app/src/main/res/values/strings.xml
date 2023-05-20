@@ -11,5 +11,7 @@
     <string name="lastMonth">Last Month</string>
     <string name="lastThreeWorkouts">Your last three workouts</string>
 
+    <string name="goalInput">Choose your power Goal</string>
+
 
    </resources>

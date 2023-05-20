@@ -27,24 +27,44 @@ public class JsonConversion {
 
     }
     // Converting the ArrayList from Planning to a JSONArray -> returning a String
-    static String convertingToJsonArray(ArrayList arrayList) throws JSONException {
+    static String convertingToJsonArray(ArrayList arrayList, String object) throws JSONException {
 
         JSONObject root = new JSONObject();
         JSONArray jsonArray = new JSONArray();
 
-        WorkoutData workoutData;
 
-        for (int i = 0; i < arrayList.size() ; i++) {
+        if ("WorkoutData".equals(object)){
 
-            workoutData = (WorkoutData) arrayList.get(i);
+            WorkoutData workoutData;
+            for (int i = 0; i < arrayList.size() ; i++) {
 
-            JSONObject workoutDataObj = new JSONObject();
+                workoutData = (WorkoutData) arrayList.get(i);
 
-            workoutDataObj.put(String.valueOf(i), workoutData.getDate());
-            workoutDataObj.put(String.valueOf(i+1), workoutData.getWorkoutName());
+                JSONObject workoutDataObj = new JSONObject();
 
-            jsonArray.put(workoutDataObj);
+                workoutDataObj.put(String.valueOf(i), workoutData.getDate());
+                workoutDataObj.put(String.valueOf(i+1), workoutData.getWorkoutName());
 
+                jsonArray.put(workoutDataObj);
+
+            }
+        } else if ("GoalObject".equals(object) ) {
+            GoalObject goalObject;
+
+            for (int i = 0; i < arrayList.size() ; i++) {
+
+                goalObject = (GoalObject) arrayList.get(i);
+
+                JSONObject goalDataObj = new JSONObject();
+
+                goalDataObj.put(String.valueOf(i), goalObject.startOfGoal);
+                goalDataObj.put(String.valueOf(i+1), goalObject.endOfGoal);
+                goalDataObj.put(String.valueOf(i+2), goalObject.goalAmount);
+
+
+                jsonArray.put(goalDataObj);
+
+            }
         }
 
         root.put("root", jsonArray);
@@ -77,22 +97,36 @@ public class JsonConversion {
     }
 
     // Converting the loaded String to JSONArray for Planning -> returning Arraylist
-    static ArrayList convertingFromJsonArray(String fileContent) throws JSONException {
+    static ArrayList convertingFromJsonArray(String fileContent, String object) throws JSONException {
 
 
-        ArrayList workouts = new ArrayList<WorkoutData>();
+
+        ArrayList workouts = new ArrayList<>();
 
         JSONObject root = new JSONObject(fileContent);
 
         JSONArray array= root.getJSONArray("root");
 
-        for (int i = 0; i < array.length(); i++) {
+        if ("WorkoutData".equals(object)){
 
-            JSONObject workoutDataObj = array.getJSONObject(i);
-            workouts.add(new WorkoutData(workoutDataObj.getString(String.valueOf(i)), workoutDataObj.getString(String.valueOf(i+1))));
+            workouts = new ArrayList<WorkoutData>();
+            for (int i = 0; i < array.length(); i++) {
 
+                JSONObject workoutDataObj = array.getJSONObject(i);
+                workouts.add(new WorkoutData(workoutDataObj.getString(String.valueOf(i)), workoutDataObj.getString(String.valueOf(i+1))));
 
+            }
+        } else if ("GoalObject".equals(object)) {
+
+            workouts = new ArrayList<GoalObject>();
+            for (int i = 0; i < array.length(); i++) {
+
+                JSONObject goalDataObj = array.getJSONObject(i);
+                workouts.add(new GoalObject(goalDataObj.getString(String.valueOf(i)), goalDataObj.getString(String.valueOf(i+1)), goalDataObj.getInt(String.valueOf(i+2))));
+
+            }
         }
+
         return workouts;
     }
 
