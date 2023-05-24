@@ -135,26 +135,11 @@
             android:layout_width="match_parent"
             android:layout_height="42dp" />
 
-        <TextView
-            android:id="@+id/textViewFirstWorkout"
+        <ListView
+            android:id="@+id/listLastWorkouts"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@color/popUpGrey"
-            android:visibility="invisible" />
+            android:layout_height="203dp" />
 
-        <TextView
-            android:id="@+id/textViewSecondWorkout"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@color/popUpGrey"
-            android:visibility="invisible" />
-
-        <TextView
-            android:id="@+id/textViewThirdWourkout"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@color/popUpGrey"
-            android:visibility="invisible" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

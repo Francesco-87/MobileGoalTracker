@@ -8,7 +8,7 @@ import java.util.Date;
 public class DateConversion {
     //Converting a calender long to a String date format
      public String convertCalendarDate(long date){
-        String dateString = new SimpleDateFormat("dd/M/yyyy").format(new Date(date));
+        String dateString = new SimpleDateFormat("d/M/yyyy").format(new Date(date));
 
         return dateString;
     }
@@ -21,10 +21,10 @@ public class DateConversion {
 
 
         if(dateYear == 0){
-                        dateString = new SimpleDateFormat("dd/M/yyyy").format(new Date(today));
+                        dateString = new SimpleDateFormat("d/M/yyyy").format(new Date(today));
         }else{
             dateString = dateDay + "/" + dateMonth +  "/" + dateYear;
-            Log.d("DATESTRING", dateString);
+
         }
         return dateString;
     }
