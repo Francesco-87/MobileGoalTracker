@@ -392,7 +392,7 @@ public class Planning extends AppCompatActivity  {
     }
 
     //method to sort the WorkData ArrayList so that the Dates are in descending order
-    private ArrayList sortArrayList(ArrayList arrayList){
+    public ArrayList sortArrayList(ArrayList arrayList){
 
         //creating a temporary ArrayList, a Long variable, a SimpleDateFormat object and a WorkoutData Object
         ArrayList tempArrayList = new ArrayList<Long>();

@@ -39,6 +39,7 @@ public class Performance extends AppCompatActivity {
     private ArrayAdapter lastThreeWorkoutsAdapter;
     private DateConversion dateConversion;
     private Date date;
+    private Planning p;
 
 
     @Override
@@ -57,6 +58,7 @@ public class Performance extends AppCompatActivity {
         date = new Date();
         dateConversion = new DateConversion();
         lastThreeWorkoutsList = new ArrayList<String>();
+        p = new Planning();
 
         //loading the workoutDataList from storage and initiating it
         try {
@@ -74,11 +76,12 @@ public class Performance extends AppCompatActivity {
         }
 
        //calling the filterArray method to display the last 3 Workouts and setting an adapter
-
-
         lastThreeWorkoutsAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, filterArrayList(workoutDataList));
         listLastWorkouts.setAdapter(lastThreeWorkoutsAdapter);
+
+        //TODO the assessment of the workouts
+        countWorkouts(workoutDataList, "Month");
 
 
 
@@ -90,14 +93,28 @@ public class Performance extends AppCompatActivity {
     }
     //finding todays Date in an Arraylist
     private int findPositionToday(@NonNull ArrayList arrayList, String d){
-        
-        int positionToday = 0;
+
+        int positionToday = 2000;
 
         for (int i = 0; i < arrayList.size(); i++) {
             WorkoutData temp = (WorkoutData) arrayList.get(i);
 
             if (d.equals(temp.getDate())){
-                positionToday = i;
+                positionToday = i+1;
+            }
+        }
+        if(positionToday == 2000){
+
+
+            arrayList.add(new WorkoutData(dateConversion.convertCalendarDate(date.getTime()), "Today"));
+            arrayList = p.sortArrayList(arrayList);
+
+            for (int i = 0; i < arrayList.size(); i++) {
+                WorkoutData temp = (WorkoutData) arrayList.get(i);
+
+                if (d.equals(temp.getDate())){
+                    positionToday = i;
+                }
             }
         }
         
@@ -109,11 +126,12 @@ public class Performance extends AppCompatActivity {
 
         ArrayList temp = new ArrayList<>();
         int positionToday =findPositionToday(aList, dateConversion.convertCalendarDate(date.getTime()));
+
         int aListMax = positionToday + 3;
         int aListTwo = positionToday + 2;
         int aListOne = positionToday + 1;
 
-//TODO fix List retriving Todays date not in list ??
+
             if (aList.size() >= aListMax){
                 for (int i = positionToday; i < positionToday + 3; i++) {
 
@@ -136,6 +154,43 @@ public class Performance extends AppCompatActivity {
 
 
         return temp;
+    }
+
+    private int countWorkouts(ArrayList arrayList, String countType){
+
+
+
+        int count = 0;
+        int positionToday =findPositionToday(arrayList, dateConversion.convertCalendarDate(date.getTime()));
+        int aListMax = positionToday + 30;
+//TODO check the array count also in the filterArrayList and getPosition today
+        switch (countType){
+            case "Month":
+                if(arrayList.size() >= aListMax){
+                    for (int i = positionToday; i < aListMax; i++) {
+                        count ++;
+                    }
+                }else{
+                    for (int i = positionToday; i < arrayList.size(); i++) {
+                        count ++;
+                    }
+
+                }
+                Log.d("COUNTwork", String.valueOf(count));
+                break;
+            case "Week":
+
+                break;
+            case "Current":
+
+                break;
+
+            default:
+                // code block
+        }
+
+
+        return count;
     }
 
 }
