@@ -1,11 +1,14 @@
 package com.ciccone.mobilegoaltracker;
 
+import static com.ciccone.mobilegoaltracker.DateUtility.convertCalendarDate;
+import static com.ciccone.mobilegoaltracker.DateUtility.findEndDatePosition;
+import static com.ciccone.mobilegoaltracker.DateUtility.findPositionToday;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -15,13 +18,8 @@ import android.widget.ProgressBar;
 
 import org.json.JSONException;
 
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.Iterator;
 
 public class Performance extends AppCompatActivity {
 
@@ -37,9 +35,10 @@ public class Performance extends AppCompatActivity {
     private ArrayList workoutDataList;
     private ArrayList lastThreeWorkoutsList;
     private ArrayAdapter lastThreeWorkoutsAdapter;
-    private DateConversion dateConversion;
+
     private Date date;
-    private Planning p;
+    private ArrayUtility arrayUtility;
+
 
 
     @Override
@@ -56,9 +55,10 @@ public class Performance extends AppCompatActivity {
 
         //initiating variables
         date = new Date();
-        dateConversion = new DateConversion();
         lastThreeWorkoutsList = new ArrayList<String>();
-        p = new Planning();
+        arrayUtility = new ArrayUtility();
+
+
 
         //loading the workoutDataList from storage and initiating it
         try {
@@ -82,6 +82,8 @@ public class Performance extends AppCompatActivity {
 
         //TODO the assessment of the workouts
         countWorkouts(workoutDataList, "Month");
+        countWorkouts(workoutDataList, "Week");
+
 
 
 
@@ -91,41 +93,13 @@ public class Performance extends AppCompatActivity {
             startActivity(returnToMain);
         });
     }
-    //finding todays Date in an Arraylist
-    private int findPositionToday(@NonNull ArrayList arrayList, String d){
-
-        int positionToday = 2000;
-
-        for (int i = 0; i < arrayList.size(); i++) {
-            WorkoutData temp = (WorkoutData) arrayList.get(i);
-
-            if (d.equals(temp.getDate())){
-                positionToday = i+1;
-            }
-        }
-        if(positionToday == 2000){
 
 
-            arrayList.add(new WorkoutData(dateConversion.convertCalendarDate(date.getTime()), "Today"));
-            arrayList = p.sortArrayList(arrayList);
-
-            for (int i = 0; i < arrayList.size(); i++) {
-                WorkoutData temp = (WorkoutData) arrayList.get(i);
-
-                if (d.equals(temp.getDate())){
-                    positionToday = i;
-                }
-            }
-        }
-        
-        return positionToday;
-    }
-
-    //A filter for the differend Performance and the Last three workouts
+    //A filter for the different Performance and the Last three workouts
     private ArrayList filterArrayList(ArrayList aList){
 
         ArrayList temp = new ArrayList<>();
-        int positionToday =findPositionToday(aList, dateConversion.convertCalendarDate(date.getTime()));
+        int positionToday = findPositionToday(aList);
 
         int aListMax = positionToday + 3;
         int aListTwo = positionToday + 2;
@@ -159,15 +133,20 @@ public class Performance extends AppCompatActivity {
     private int countWorkouts(ArrayList arrayList, String countType){
 
 
-
+        arrayList = arrayUtility.sortArrayList(arrayList);
         int count = 0;
-        int positionToday =findPositionToday(arrayList, dateConversion.convertCalendarDate(date.getTime()));
-        int aListMax = positionToday + 30;
-//TODO check the array count also in the filterArrayList and getPosition today
+        int positionToday =findPositionToday(arrayList);
+        int positionEnd =  findEndDatePosition(arrayList, "endDate");
+        int positionStart;
+        int positionEndCurrent = findEndDatePosition(arrayList, );
+
+        int arrayListMaxMonth = positionToday + 30;
+
+
         switch (countType){
             case "Month":
-                if(arrayList.size() >= aListMax){
-                    for (int i = positionToday; i < aListMax; i++) {
+                if(arrayList.size() >= arrayListMaxMonth){
+                    for (int i = positionToday; i < arrayListMaxMonth; i++) {
                         count ++;
                     }
                 }else{
@@ -176,10 +155,15 @@ public class Performance extends AppCompatActivity {
                     }
 
                 }
-                Log.d("COUNTwork", String.valueOf(count));
+
                 break;
             case "Week":
+                    for (int i = positionToday; i <= positionEnd; i++) {
+                        count ++;
 
+                    }
+
+                    Log.d("COUNTW", String.valueOf(count));
                 break;
             case "Current":
 
@@ -188,7 +172,10 @@ public class Performance extends AppCompatActivity {
             default:
                 // code block
         }
+                    for (int i = positionToday; i <= positionEnd; i++) {
+                        count ++;
 
+                    }
 
         return count;
     }

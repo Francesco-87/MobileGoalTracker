@@ -7,10 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
-import android.icu.util.Calendar;
 import android.os.Bundle;
-import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -66,6 +63,7 @@ public class Planning extends AppCompatActivity  {
 
     private  CalendarConstraints constraintsBuilder;
     private MaterialDatePicker<androidx.core.util.Pair<Long, Long>> materialDatePicker;
+    private ArrayUtility arrayUtility = new ArrayUtility();
 
 
     int dateYear;
@@ -164,7 +162,7 @@ public class Planning extends AppCompatActivity  {
 
             today = calendarView.getDate();
 
-            dateString  = new DateConversion().checkDate(dateYear,dateMonth,dateDay,today);
+            dateString  = new DateUtility().checkDate(dateYear,dateMonth,dateDay,today);
             updateTextViewCalenderActivity();
 
         });
@@ -232,7 +230,7 @@ public class Planning extends AppCompatActivity  {
                             itemTxt = userInput.getText().toString();
                             workoutDataList.add(new WorkoutData(dateString, itemTxt));
 
-                            workoutDataList = sortArrayList(workoutDataList);
+                            workoutDataList = arrayUtility.sortArrayList(workoutDataList);
                             try {
 
                                 FileManager.saveToStorage(JsonConversion.convertingToJsonArray(workoutDataList, "WorkoutData"), context, FILE_NAME);
@@ -287,8 +285,8 @@ public class Planning extends AppCompatActivity  {
 
                     // if the user clicks on the positive; button that is ok button update the; selected date
 
-                    String startDate = new DateConversion().convertCalendarDate(materialDatePicker.getSelection().first);
-                    String endDate = new DateConversion().convertCalendarDate(materialDatePicker.getSelection().second);
+                    String startDate = new DateUtility().convertCalendarDate(materialDatePicker.getSelection().first);
+                    String endDate = new DateUtility().convertCalendarDate(materialDatePicker.getSelection().second);
 
                    goalObject.setStartOfGoal(startDate);
                    goalObject.setEndOfGoal(endDate);
@@ -380,10 +378,10 @@ public class Planning extends AppCompatActivity  {
                 workoutDataList.remove(i);
             }
         }
-        workoutDataList = sortArrayList(workoutDataList);
+        workoutDataList = arrayUtility.sortArrayList(workoutDataList);
         try {
 
-            FileManager.saveToStorage(JsonConversion.convertingToJsonArray(sortArrayList(workoutDataList), "WorkoutData"), context, FILE_NAME);
+            FileManager.saveToStorage(JsonConversion.convertingToJsonArray(arrayUtility.sortArrayList(workoutDataList), "WorkoutData"), context, FILE_NAME);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -391,53 +389,7 @@ public class Planning extends AppCompatActivity  {
 
     }
 
-    //method to sort the WorkData ArrayList so that the Dates are in descending order
-    public ArrayList sortArrayList(ArrayList arrayList){
 
-        //creating a temporary ArrayList, a Long variable, a SimpleDateFormat object and a WorkoutData Object
-        ArrayList tempArrayList = new ArrayList<Long>();
-        ArrayList tempWorkoutList = new ArrayList<WorkoutData>();
-
-        Long time;
-
-        SimpleDateFormat f = new SimpleDateFormat("d/M/yyyy");
-
-        WorkoutData workoutData1;
-//looping through the original ArrayList to get the date and forming it to Long in a tempArrayList
-        for (int i = 0; i < arrayList.size(); i++) {
-            workoutData1 = (WorkoutData) arrayList.get(i);
-
-            try {
-                Date first = f.parse(workoutData1.getDate());
-
-                time = first.getTime();
-                tempArrayList.add(time);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-        //Sorting the tempArrayList ascending
-        tempArrayList.sort(Comparator.reverseOrder());
-
-        //Looping through the tempArraylist to format it back to a date and compare it to the original ArrayList for sorting
-        for (int i = 0; i < tempArrayList.size(); i++) {
-            for (int j = 0; j < arrayList.size(); j++) {
-
-                workoutData1 = (WorkoutData) arrayList.get(j);
-                time = (Long) tempArrayList.get(i);
-
-                String d1 = f.format(new Date(time));
-
-                if(d1.equals(workoutData1.getDate())){
-                    tempWorkoutList.add(arrayList.get(j));
-                }
-            }
-
-
-        }
-
-        return tempWorkoutList;
-    }
 
 
 }
