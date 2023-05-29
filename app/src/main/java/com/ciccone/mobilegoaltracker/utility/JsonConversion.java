@@ -1,6 +1,7 @@
-package com.ciccone.mobilegoaltracker;
+package com.ciccone.mobilegoaltracker.utility;
 
-import android.util.Log;
+import com.ciccone.mobilegoaltracker.model.GoalObject;
+import com.ciccone.mobilegoaltracker.WorkoutData;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 public class JsonConversion {
 
     //Todo write proper description and tidy up
-    static String convertingToJSON(ArrayList arrayList) throws JSONException {
+    public static String convertingToJSON(ArrayList arrayList) throws JSONException {
 
         JSONObject jsonObject = new JSONObject();
 
@@ -27,7 +28,7 @@ public class JsonConversion {
 
     }
     // Converting the ArrayList from Planning to a JSONArray -> returning a String
-    static String convertingToJsonArray(ArrayList arrayList, String object) throws JSONException {
+    public static String convertingToJsonArray(ArrayList arrayList, String object) throws JSONException {
 
         JSONObject root = new JSONObject();
         JSONArray jsonArray = new JSONArray();
@@ -79,7 +80,7 @@ public class JsonConversion {
 
 
     // Converting the loaded String to JSON -> returning Arraylist
-    static ArrayList convertingFromJson(String fileContent) throws JSONException {
+    public static ArrayList convertingFromJson(String fileContent) throws JSONException {
 
         ArrayList workouts = new ArrayList<>();
 
@@ -97,7 +98,7 @@ public class JsonConversion {
     }
 
     // Converting the loaded String to JSONArray for Planning -> returning Arraylist
-    static ArrayList convertingFromJsonArray(String fileContent, String object) throws JSONException {
+    public static ArrayList convertingFromJsonArray(String fileContent, String object) throws JSONException {
 
 
 

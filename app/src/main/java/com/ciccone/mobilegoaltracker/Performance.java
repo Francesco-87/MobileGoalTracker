@@ -1,11 +1,11 @@
 package com.ciccone.mobilegoaltracker;
 
-import static com.ciccone.mobilegoaltracker.DateUtility.calculateDaysApart;
-import static com.ciccone.mobilegoaltracker.DateUtility.dateToLong;
-import static com.ciccone.mobilegoaltracker.DateUtility.findEndDatePosition;
-import static com.ciccone.mobilegoaltracker.DateUtility.findEndPositionGoal;
-import static com.ciccone.mobilegoaltracker.DateUtility.findPositionToday;
-import static com.ciccone.mobilegoaltracker.DateUtility.findStartPositionGoal;
+import static com.ciccone.mobilegoaltracker.utility.DateUtility.calculateDaysApart;
+import static com.ciccone.mobilegoaltracker.utility.DateUtility.dateToLong;
+import static com.ciccone.mobilegoaltracker.utility.ArrayUtility.findEndDatePosition;
+import static com.ciccone.mobilegoaltracker.utility.ArrayUtility.findEndPositionGoal;
+import static com.ciccone.mobilegoaltracker.utility.ArrayUtility.findPositionToday;
+import static com.ciccone.mobilegoaltracker.utility.ArrayUtility.findStartPositionGoal;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,6 +17,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+
+import com.ciccone.mobilegoaltracker.model.GoalObject;
+import com.ciccone.mobilegoaltracker.utility.ArrayUtility;
+import com.ciccone.mobilegoaltracker.utility.FileManager;
+import com.ciccone.mobilegoaltracker.utility.JsonConversion;
 
 import org.json.JSONException;
 
@@ -108,7 +113,7 @@ public class Performance extends AppCompatActivity {
 
        //calling the filterArray method to display the last 3 Workouts and setting an adapter
         lastThreeWorkoutsAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, filterArrayList(workoutDataList));
+                android.R.layout.simple_list_item_1, ArrayUtility.filterArrayList(workoutDataList));
         listLastWorkouts.setAdapter(lastThreeWorkoutsAdapter);
 
         //calling the counts and setting the progress in the progress bar
@@ -125,40 +130,7 @@ public class Performance extends AppCompatActivity {
     }
 
 
-    //A filter for the different Performance and the Last three workouts
-    private ArrayList filterArrayList(ArrayList aList){
 
-        ArrayList temp = new ArrayList<>();
-        int positionToday = findPositionToday(aList);
-
-        int aListMax = positionToday + 3;
-        int aListTwo = positionToday + 2;
-        int aListOne = positionToday + 1;
-
-
-            if (aList.size() >= aListMax){
-                for (int i = positionToday; i < positionToday + 3; i++) {
-
-                    WorkoutData lastThreeWorkouts = (WorkoutData) aList.get(i);
-                    temp.add(lastThreeWorkouts.getDate() + "\n" + lastThreeWorkouts.getWorkoutName() );
-                }
-            } else if (aList.size() >= aListTwo) {
-                for (int i = positionToday; i < positionToday + 2; i++) {
-
-                    WorkoutData lastThreeWorkouts = (WorkoutData) aList.get(i);
-                    temp.add(lastThreeWorkouts.getDate() + "\n" + lastThreeWorkouts.getWorkoutName() );
-                }
-            } else if (aList.size() >= aListOne) {
-                for (int i = positionToday; i < positionToday + 1; i++) {
-
-                    WorkoutData lastThreeWorkouts = (WorkoutData) aList.get(i);
-                    temp.add(lastThreeWorkouts.getDate() + "\n" + lastThreeWorkouts.getWorkoutName() );
-                }
-            }
-
-
-        return temp;
-    }
 
     private int countWorkouts(ArrayList arrayList, String countType){
 

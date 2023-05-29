@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,16 +17,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ciccone.mobilegoaltracker.model.GoalObject;
+import com.ciccone.mobilegoaltracker.utility.ArrayUtility;
+import com.ciccone.mobilegoaltracker.utility.DateUtility;
+import com.ciccone.mobilegoaltracker.utility.FileManager;
+import com.ciccone.mobilegoaltracker.utility.JsonConversion;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
 import org.json.JSONException;
 
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
 
 public class Planning extends AppCompatActivity  {
 

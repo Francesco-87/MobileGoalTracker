@@ -1,4 +1,4 @@
-package com.ciccone.mobilegoaltracker;
+package com.ciccone.mobilegoaltracker.utility;
 
 import android.content.Context;
 import android.util.Log;
@@ -19,7 +19,7 @@ public class FileManager  {
 
 
     // Saving the file in the internal storage with FileOutputStream
-    static void saveToStorage(String s, Context context, String fileName) {
+    public static void saveToStorage(String s, Context context, String fileName) {
         try{
             FileOutputStream fOut = context.openFileOutput(fileName, Context.MODE_PRIVATE);
 
@@ -35,7 +35,7 @@ public class FileManager  {
 
 
     //reading text from file
-    static String readFromStorage(Context context, String fileName){
+    public static String readFromStorage(Context context, String fileName){
 
         //Empty string variable
         String fileContent = "";
@@ -66,12 +66,12 @@ public class FileManager  {
     }
 
 
-    static boolean fileExist( Context context, String filename){
+    public static boolean fileExist(Context context, String filename){
         File file = context.getFileStreamPath(filename);
         return file.exists();
     }
 
-    static boolean fileDelete(Context context, String filename){
+    public static boolean fileDelete(Context context, String filename){
         File file = context.getFileStreamPath(filename);
         return file.delete();
     }
