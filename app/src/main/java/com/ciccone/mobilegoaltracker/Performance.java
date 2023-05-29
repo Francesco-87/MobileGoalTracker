@@ -1,10 +1,12 @@
 package com.ciccone.mobilegoaltracker;
 
-import static com.ciccone.mobilegoaltracker.DateUtility.convertCalendarDate;
+import static com.ciccone.mobilegoaltracker.DateUtility.calculateDaysApart;
+import static com.ciccone.mobilegoaltracker.DateUtility.dateToLong;
 import static com.ciccone.mobilegoaltracker.DateUtility.findEndDatePosition;
+import static com.ciccone.mobilegoaltracker.DateUtility.findEndPositionGoal;
 import static com.ciccone.mobilegoaltracker.DateUtility.findPositionToday;
+import static com.ciccone.mobilegoaltracker.DateUtility.findStartPositionGoal;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -25,6 +27,7 @@ public class Performance extends AppCompatActivity {
 
     //setting all the variables
     private String FILE_NAME = "Planning.txt";
+    private String FILE_NAME_GOAL = "Goal.txt";
     private Context context = this;
     private ImageButton returnToMain;
     private ProgressBar current;
@@ -33,11 +36,16 @@ public class Performance extends AppCompatActivity {
     private ListView listLastWorkouts;
     private WorkoutData workoutData;
     private ArrayList workoutDataList;
-    private ArrayList lastThreeWorkoutsList;
     private ArrayAdapter lastThreeWorkoutsAdapter;
+    private ArrayList workoutGoal;
+    private GoalObject goalObject;
 
     private Date date;
     private ArrayUtility arrayUtility;
+
+    private final String MONTH_COUNT = "Month";
+    private final String CURRENT_COUNT = "Current";
+    private final String LAST_WEEK_COUNT = "LastWeek";
 
 
 
@@ -55,7 +63,6 @@ public class Performance extends AppCompatActivity {
 
         //initiating variables
         date = new Date();
-        lastThreeWorkoutsList = new ArrayList<String>();
         arrayUtility = new ArrayUtility();
 
 
@@ -75,15 +82,38 @@ public class Performance extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
+        //loading the Goal from storage and initiating it
+        try {
+            if (FileManager.fileExist(context, FILE_NAME_GOAL)) {
+                workoutGoal = new ArrayList<GoalObject>(
+                        JsonConversion.convertingFromJsonArray(FileManager.readFromStorage(context, FILE_NAME_GOAL),"GoalObject"));
+
+                goalObject = (GoalObject) workoutGoal.get(0);
+
+
+                current.setMax(calculateDaysApart(dateToLong(goalObject.getStartOfGoal()), dateToLong(goalObject.getEndOfGoal()))+1);
+                int d = calculateDaysApart(dateToLong(goalObject.getStartOfGoal()), dateToLong(goalObject.getEndOfGoal()));
+                Log.d("DATECHECK", String.valueOf(d));
+                current.setProgress(countWorkouts(workoutDataList, CURRENT_COUNT));
+                int c = countWorkouts(workoutDataList, CURRENT_COUNT);
+                Log.d("DATECHECK", String.valueOf(c));
+
+            } else {
+                workoutGoal = new ArrayList<GoalObject>();
+
+            }
+        }catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
        //calling the filterArray method to display the last 3 Workouts and setting an adapter
         lastThreeWorkoutsAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, filterArrayList(workoutDataList));
         listLastWorkouts.setAdapter(lastThreeWorkoutsAdapter);
 
-        //TODO the assessment of the workouts
-        countWorkouts(workoutDataList, "Month");
-        countWorkouts(workoutDataList, "Week");
-
+        //calling the counts and setting the progress in the progress bar
+        lastMonth.setProgress(countWorkouts(workoutDataList, MONTH_COUNT));
+        lastWeek.setProgress(countWorkouts(workoutDataList, LAST_WEEK_COUNT));
 
 
 
@@ -132,19 +162,24 @@ public class Performance extends AppCompatActivity {
 
     private int countWorkouts(ArrayList arrayList, String countType){
 
+        int count = 0;
+        int positionToday;
+        int positionEnd;
+        int positionStartCurrent;
+        int positionEndCurrent;
+
 
         arrayList = arrayUtility.sortArrayList(arrayList);
-        int count = 0;
-        int positionToday =findPositionToday(arrayList);
-        int positionEnd =  findEndDatePosition(arrayList, "endDate");
-        int positionStart;
-        int positionEndCurrent = findEndDatePosition(arrayList, );
-
-        int arrayListMaxMonth = positionToday + 30;
-
+        int arrayListSizeOriginal = arrayList.size();
+        int arrayListSize;
 
         switch (countType){
-            case "Month":
+            case MONTH_COUNT:
+
+                positionToday = findPositionToday(arrayList);
+                arrayList = arrayUtility.sortArrayList(arrayList);
+                int arrayListMaxMonth = positionToday + 30;
+                arrayListSize = arrayList.size();
                 if(arrayList.size() >= arrayListMaxMonth){
                     for (int i = positionToday; i < arrayListMaxMonth; i++) {
                         count ++;
@@ -152,30 +187,53 @@ public class Performance extends AppCompatActivity {
                 }else{
                     for (int i = positionToday; i < arrayList.size(); i++) {
                         count ++;
-                    }
 
+                    }
+                }
+
+                if(arrayListSize != arrayListSizeOriginal){
+                    arrayList.remove(findEndDatePosition(arrayList));
+                    arrayList.remove(findPositionToday(arrayList));
                 }
 
                 break;
-            case "Week":
-                    for (int i = positionToday; i <= positionEnd; i++) {
+            case LAST_WEEK_COUNT:
+
+                positionEnd =  findEndDatePosition(arrayList);
+                positionToday = findPositionToday(arrayList);
+                arrayList = arrayUtility.sortArrayList(arrayList);
+                arrayListSize = arrayList.size();
+
+                    for (int i = positionToday; i < positionEnd; i++) {
                         count ++;
 
                     }
+                    if(arrayListSize != arrayListSizeOriginal){
+                        arrayList.remove(findEndDatePosition(arrayList));
+                        arrayList.remove(findPositionToday(arrayList));
+                    }
 
-                    Log.d("COUNTW", String.valueOf(count));
                 break;
-            case "Current":
+            case CURRENT_COUNT:
+
+                positionStartCurrent = findStartPositionGoal(arrayList, goalObject.getEndOfGoal());
+                positionEndCurrent =  findEndPositionGoal(arrayList, goalObject.getStartOfGoal());
+                arrayList = arrayUtility.sortArrayList(arrayList);
+                arrayListSize = arrayList.size();
+                for (int i = positionStartCurrent; i <= positionEndCurrent; i++) {
+                    count ++;
+
+                }
+                if(arrayListSize != arrayListSizeOriginal){
+                    arrayList.remove(findStartPositionGoal(arrayList, goalObject.getEndOfGoal()));
+                    arrayList.remove(findEndPositionGoal(arrayList, goalObject.getStartOfGoal()));
+                }
 
                 break;
 
             default:
                 // code block
         }
-                    for (int i = positionToday; i <= positionEnd; i++) {
-                        count ++;
-
-                    }
 
         return count;
     }

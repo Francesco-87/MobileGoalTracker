@@ -279,7 +279,6 @@ public class Planning extends AppCompatActivity  {
     //Calling the datepicker for the Goal
         materialDatePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
 
-
         materialDatePicker.addOnPositiveButtonClickListener(
                 selection -> {
 
@@ -298,7 +297,6 @@ public class Planning extends AppCompatActivity  {
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
-
 
                 });
 

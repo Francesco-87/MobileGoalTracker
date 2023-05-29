@@ -6,6 +6,11 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -48,7 +53,7 @@ public class DateUtility {
             WorkoutData temp = (WorkoutData) arrayList.get(i);
 
             if (today.equals(temp.getDate())){
-                positionToday = i+1;
+                positionToday = i;
             }
         }
         if(positionToday == 2000){
@@ -60,32 +65,32 @@ public class DateUtility {
                 WorkoutData temp = (WorkoutData) arrayList.get(i);
 
                 if (today.equals(temp.getDate())){
-                    positionToday = i;
+                    positionToday = i+1;
                 }
             }
         }
 
         return positionToday;
     }
-    //TODO finish this
-    public static int findEndDatePosition(ArrayList arrayList, String endDate){
+
+    public static int findEndDatePosition(ArrayList arrayList){
         int positionEndDate = 2000;
 
-        if(endDate.equals("endDate")){
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DATE, -7);
-            endDate = convertCalendarDate(cal.getTimeInMillis());
-        }
+        //It creates a calender instance and checks 7 days before today (for performance week)
 
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -7);
+        String endDate = convertCalendarDate(cal.getTimeInMillis());
 
+            for (int i = 0; i < arrayList.size(); i++) {
+                WorkoutData temp = (WorkoutData) arrayList.get(i);
 
-        for (int i = 0; i < arrayList.size(); i++) {
-            WorkoutData temp = (WorkoutData) arrayList.get(i);
-
-            if (endDate.equals(temp.getDate())){
-                positionEndDate = i+1;
+                if (endDate.equals(temp.getDate())){
+                    positionEndDate = i;
+                }
             }
-        }
+
+            // If date does not exist add the date temporarily
         if(positionEndDate == 2000){
 
             arrayList.add(new WorkoutData(endDate, "EndDate"));
@@ -104,23 +109,51 @@ public class DateUtility {
          return positionEndDate;
     }
 
-    //TODO start position for workoutGoal, modify findEndDatePosition for reuse in this here
-    public static int findStartPosition(ArrayList arrayList, String startDate){
+    public static int findStartPositionGoal(ArrayList arrayList, String endDate) {
+
+        //it takes the passed in startDate string (for performance current)
         int startPosition = 2000;
 
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -7);
-        String endDate = convertCalendarDate(cal.getTimeInMillis());
-        String today = convertCalendarDate(DateUtility.date.getTime());
 
         for (int i = 0; i < arrayList.size(); i++) {
             WorkoutData temp = (WorkoutData) arrayList.get(i);
 
             if (endDate.equals(temp.getDate())){
-                startPosition = i+1;
+                startPosition = i;
             }
         }
         if(startPosition == 2000){
+
+            arrayList.add(new WorkoutData(endDate, "EndDateGoal"));
+            arrayList = arrayUtility.sortArrayList(arrayList);
+
+            for (int i = 0; i < arrayList.size(); i++) {
+                WorkoutData temp = (WorkoutData) arrayList.get(i);
+
+                if (endDate.equals(temp.getDate())){
+                    startPosition = i+1;
+                }
+            }
+        }
+
+
+
+        return startPosition;
+    }
+
+    public static int findEndPositionGoal(ArrayList arrayList, String endDate){
+        int positionEndDate = 2000;
+
+        for (int i = 0; i < arrayList.size(); i++) {
+            WorkoutData temp = (WorkoutData) arrayList.get(i);
+
+            if (endDate.equals(temp.getDate())){
+                positionEndDate = i;
+            }
+        }
+
+        // If date does not exist add the date temporarily
+        if(positionEndDate == 2000){
 
             arrayList.add(new WorkoutData(endDate, "EndDate"));
             arrayList = arrayUtility.sortArrayList(arrayList);
@@ -129,13 +162,40 @@ public class DateUtility {
                 WorkoutData temp = (WorkoutData) arrayList.get(i);
 
                 if (endDate.equals(temp.getDate())){
-                    startPosition = i;
+                    positionEndDate = i;
                 }
             }
         }
 
-
-        return startPosition;
+         return positionEndDate;
     }
+
+
+//taking a String date and returning it as a long value
+    public static long dateToLong(String date){
+
+        SimpleDateFormat f = new SimpleDateFormat("d/M/yyyy");
+
+         long temp = 0;
+
+        try {
+            Date first = f.parse(date);
+            temp = first.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+         return temp;
+    }
+
+    public static int calculateDaysApart(long start, long end){
+         int days;
+         long temp = end - start;
+        days = (int) (temp / (1000*60*60*24));
+
+
+         return days;
+    }
+
 
 }

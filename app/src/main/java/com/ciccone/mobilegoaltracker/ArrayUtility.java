@@ -37,6 +37,7 @@ public class ArrayUtility {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+
         }
         //Sorting the tempArrayList ascending
         tempArrayList.sort(Comparator.reverseOrder());

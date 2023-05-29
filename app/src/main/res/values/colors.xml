@@ -10,4 +10,10 @@
     <color name="goal">#FF9800</color>
     <color name="addButton">#FF6B3D</color>
     <color name="pink">#DA5284</color>
+
+    <color name="progressMonthPrimary">#3949AB</color>
+    <color name="progressLastWeekPrimary">#BD243B</color>
+    <color name="progressCurrentPrimary">#248531</color>
+    <color name="progressCircle">#DDD</color>
+
 </resources>

@@ -81,30 +81,41 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="66dp"
-            android:orientation="horizontal">
+            android:layout_height="120dp"
+            android:orientation="horizontal"
+            >
+
 
             <ProgressBar
                 android:id="@+id/progressBarCurrent"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:progressTint="#43A047" />
+                android:layout_width="115dp"
+                android:layout_height="90dp"
+                android:backgroundTintMode="add"
+                android:indeterminateOnly="false"
+                android:progressDrawable="@drawable/progress_circle"
+                android:progressTint="@color/progressCurrentPrimary"
+                android:progressTintMode="add" />
 
             <ProgressBar
                 android:id="@+id/progressBarLastWeek"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_width="115dp"
+                android:layout_height="90dp"
+                android:indeterminateOnly="false"
+                android:max="7"
+                android:progressDrawable="@drawable/progress_circle"
+                android:progressTint="@color/progressLastWeekPrimary"
+                android:progressTintMode="add" />
 
             <ProgressBar
                 android:id="@+id/progressBarLastMonth"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_width="115dp"
+                android:layout_height="90dp"
+                android:indeterminateOnly="false"
+                android:max="30"
+                android:progressDrawable="@drawable/progress_circle"
+                android:progressTint="@color/progressMonthPrimary"
+                android:progressTintMode="add" />
+
         </LinearLayout>
     </LinearLayout>
 
@@ -112,12 +123,11 @@
         android:layout_width="353dp"
         android:layout_height="400dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="68dp"
         android:layout_marginEnd="8dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
 
