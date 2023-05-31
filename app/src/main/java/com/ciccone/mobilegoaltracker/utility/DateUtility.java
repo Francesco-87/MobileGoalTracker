@@ -1,27 +1,23 @@
 package com.ciccone.mobilegoaltracker.utility;
 
 import android.icu.text.SimpleDateFormat;
-import android.icu.util.Calendar;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
 
 import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class DateUtility {
 
-    //initializing variables and instances
-    static Date date = new Date();
+
+
+    private static SimpleDateFormat tempDate = new SimpleDateFormat("d/M/yyyy");
+
 
     //Converting a calender long to a String date format
      public static String convertCalendarDate(long date){
-        String dateString = new SimpleDateFormat("d/M/yyyy").format(new Date(date));
+
+
+        String dateString = tempDate.format(new Date(date));
+
 
         return dateString;
     }
@@ -48,12 +44,12 @@ public class DateUtility {
 //taking a String date and returning it as a long value
     public static long dateToLong(String date){
 
-        SimpleDateFormat f = new SimpleDateFormat("d/M/yyyy");
+
 
          long temp = 0;
 
         try {
-            Date first = f.parse(date);
+            Date first = tempDate.parse(date);
             temp = first.getTime();
         } catch (ParseException e) {
             e.printStackTrace();

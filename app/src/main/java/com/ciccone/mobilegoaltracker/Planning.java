@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ciccone.mobilegoaltracker.model.GoalObject;
+import com.ciccone.mobilegoaltracker.model.WorkoutData;
 import com.ciccone.mobilegoaltracker.utility.ArrayUtility;
 import com.ciccone.mobilegoaltracker.utility.DateUtility;
 import com.ciccone.mobilegoaltracker.utility.FileManager;

@@ -7,7 +7,7 @@ import android.icu.util.Calendar;
 
 import androidx.annotation.NonNull;
 
-import com.ciccone.mobilegoaltracker.WorkoutData;
+import com.ciccone.mobilegoaltracker.model.WorkoutData;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -105,7 +105,7 @@ public class ArrayUtility {
     public static int findPositionToday(@NonNull ArrayList arrayList){
 
         int positionToday = 2000;
-        String today = convertCalendarDate(DateUtility.date.getTime());
+        String today = convertCalendarDate(new Date().getTime());
 
         for (int i = 0; i < arrayList.size(); i++) {
             WorkoutData temp = (WorkoutData) arrayList.get(i);

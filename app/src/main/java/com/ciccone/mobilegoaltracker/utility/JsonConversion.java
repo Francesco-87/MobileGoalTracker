@@ -1,7 +1,7 @@
 package com.ciccone.mobilegoaltracker.utility;
 
 import com.ciccone.mobilegoaltracker.model.GoalObject;
-import com.ciccone.mobilegoaltracker.WorkoutData;
+import com.ciccone.mobilegoaltracker.model.WorkoutData;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.ciccone.mobilegoaltracker.model.GoalObject;
+import com.ciccone.mobilegoaltracker.model.WorkoutData;
 import com.ciccone.mobilegoaltracker.utility.ArrayUtility;
 import com.ciccone.mobilegoaltracker.utility.FileManager;
 import com.ciccone.mobilegoaltracker.utility.JsonConversion;

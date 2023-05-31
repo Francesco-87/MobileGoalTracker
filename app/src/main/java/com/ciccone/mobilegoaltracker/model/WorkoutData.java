@@ -1,4 +1,4 @@
-package com.ciccone.mobilegoaltracker;
+package com.ciccone.mobilegoaltracker.model;
 
 public class WorkoutData {
 
