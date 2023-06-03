@@ -212,29 +212,24 @@ public class Planning extends AppCompatActivity  {
     private void addWorkout() {
         LayoutInflater li= LayoutInflater.from(this);
         View promptsView = li.inflate(R.layout.input_name, null);
-
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
         //set the prompts.xml to alertdialog builder
         alertDialogBuilder.setView(promptsView);
 
         userInput = promptsView.findViewById(R.id.editTxtInput);
-
-
         // set dialog message
         alertDialogBuilder
                 .setCancelable(false)
                 .setPositiveButton("Create",
                         (dialog, id) -> {
-                            // get user input and set it to result
-                            // edit text
-                            // result.setText(userInput.getText());
+                            // get user input and add it to workoutDataList
                             itemTxt = userInput.getText().toString();
                             workoutDataList.add(new WorkoutData(dateString, itemTxt));
 
                             workoutDataList = arrayUtility.sortArrayList(workoutDataList);
+                            // save the workoutDataList to a file via Json and filestorage
                             try {
-
                                 FileManager.saveToStorage(JsonConversion.convertingToJsonArray(workoutDataList, "WorkoutData"), context, FILE_NAME);
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
@@ -244,15 +239,9 @@ public class Planning extends AppCompatActivity  {
                                     Toast.LENGTH_SHORT).show();
                         })
                 .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
-                                dialog.cancel();
-                            }
-                        });
-
+                        (dialog, id) -> dialog.cancel());
         // create alert dialog
         AlertDialog alertDialog = alertDialogBuilder.create();
-
         // show it
         alertDialog.show();
     }

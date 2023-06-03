@@ -7,8 +7,6 @@ import java.util.Date;
 
 public class DateUtility {
 
-
-
     private static SimpleDateFormat tempDate = new SimpleDateFormat("d/M/yyyy");
 
 
@@ -38,13 +36,8 @@ public class DateUtility {
         return dateString;
     }
 
-
-
-
 //taking a String date and returning it as a long value
     public static long dateToLong(String date){
-
-
 
          long temp = 0;
 
