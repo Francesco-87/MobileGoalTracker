@@ -17,7 +17,6 @@ public class FileManager  {
 
     static final int READ_BLOCK_SIZE = 100;
 
-
     // Saving the file in the internal storage with FileOutputStream
     public static void saveToStorage(String s, Context context, String fileName) {
         try{
@@ -26,7 +25,6 @@ public class FileManager  {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fOut);
             outputStreamWriter.write(s);
             outputStreamWriter.close();
-
 
         } catch (IOException e){
             throw new RuntimeException(e);
@@ -39,18 +37,13 @@ public class FileManager  {
 
         //Empty string variable
         String fileContent = "";
-
         //trying to read a specific "Workout.txt" file via InputStream and adding it to fileContent with a while loop
         try{
             FileInputStream fIn = context.openFileInput(fileName);
-
             InputStreamReader inputStreamReader = new InputStreamReader(fIn);
 
-
             char[] inputBuffer = new char[READ_BLOCK_SIZE];
-
             int charRead;
-
             while ((charRead = inputStreamReader.read(inputBuffer)) != -1) {
                 // char to string conversion
                 String readstring = String.copyValueOf(inputBuffer, 0, charRead);

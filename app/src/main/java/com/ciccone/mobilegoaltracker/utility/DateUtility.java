@@ -28,7 +28,7 @@ public class DateUtility {
 
 
         if(dateYear == 0){
-                        dateString = new SimpleDateFormat("d/M/yyyy").format(new Date(today));
+                        dateString = tempDate.format(new Date(today));
         }else{
             dateString = dateDay + "/" + dateMonth +  "/" + dateYear;
 
