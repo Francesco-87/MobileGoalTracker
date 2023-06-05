@@ -5,6 +5,7 @@ import android.icu.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
+//a class for date utilities
 public class DateUtility {
 
     private static SimpleDateFormat tempDate = new SimpleDateFormat("d/M/yyyy");
@@ -21,12 +22,12 @@ public class DateUtility {
     }
 
 
-    //method to check if it is the default date or a new date
+    //method to check if it is the default date or a new date, returning a string
     public String checkDate(int dateYear, int dateMonth, int dateDay, Long today){
 
         String dateString;
 
-
+        //if the passed in year, there was no date selected on the calenderView and today´s date is used
         if(dateYear == 0){
                         dateString = tempDate.format(new Date(today));
         }else{
@@ -51,9 +52,12 @@ public class DateUtility {
          return temp;
     }
 
+    // a method to calculate days apart between dates, returning an integer
     public static int calculateDaysApart(long start, long end){
          int days;
          long temp = end - start;
+
+         //converting from long to integer
         days = (int) (temp / (1000*60*60*24));
 
 

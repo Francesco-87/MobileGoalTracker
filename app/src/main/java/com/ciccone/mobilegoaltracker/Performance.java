@@ -40,13 +40,11 @@ public class Performance extends AppCompatActivity {
     private ProgressBar lastWeek;
     private ProgressBar lastMonth;
     private ListView listLastWorkouts;
-    private WorkoutData workoutData;
     private ArrayList workoutDataList;
     private ArrayAdapter lastThreeWorkoutsAdapter;
     private ArrayList workoutGoal;
     private GoalObject goalObject;
 
-    private Date date;
     private ArrayUtility arrayUtility;
 
     private final String MONTH_COUNT = "Month";
@@ -68,7 +66,6 @@ public class Performance extends AppCompatActivity {
         listLastWorkouts = findViewById(R.id.listLastWorkouts);
 
         //initiating variables
-        date = new Date();
         arrayUtility = new ArrayUtility();
 
 
@@ -96,13 +93,9 @@ public class Performance extends AppCompatActivity {
 
                 goalObject = (GoalObject) workoutGoal.get(0);
 
-
+                //setting the progressbar for current to the max days in the goal and setting the goal
                 current.setMax(calculateDaysApart(dateToLong(goalObject.getStartOfGoal()), dateToLong(goalObject.getEndOfGoal()))+1);
-                int d = calculateDaysApart(dateToLong(goalObject.getStartOfGoal()), dateToLong(goalObject.getEndOfGoal()));
-                Log.d("DATECHECK", String.valueOf(d));
                 current.setProgress(countWorkouts(workoutDataList, CURRENT_COUNT));
-                int c = countWorkouts(workoutDataList, CURRENT_COUNT);
-                Log.d("DATECHECK", String.valueOf(c));
 
             } else {
                 workoutGoal = new ArrayList<GoalObject>();
@@ -123,7 +116,7 @@ public class Performance extends AppCompatActivity {
 
 
 
-        //implementing the return to mainActivity function
+        //implementing the return to mainActivity function via intent
         returnToMain.setOnClickListener(View ->{
             Intent returnToMain = new Intent(Performance.this, MainActivity.class);
             startActivity(returnToMain);
@@ -133,7 +126,9 @@ public class Performance extends AppCompatActivity {
 
 
 
+    //a switch that takes in an Arraylist and a string (for differentiating the case) and returns a method
     private int countWorkouts(ArrayList arrayList, String countType){
+
 
         int count = 0;
         int positionToday;
@@ -141,18 +136,21 @@ public class Performance extends AppCompatActivity {
         int positionStartCurrent;
         int positionEndCurrent;
 
-
+        //sorting the arrayList for the first count and getting the original size
         arrayList = arrayUtility.sortArrayList(arrayList);
         int arrayListSizeOriginal = arrayList.size();
         int arrayListSize;
 
         switch (countType){
+            //this case is for the month progress
             case MONTH_COUNT:
 
+                    //assigning position by calling the findPositionToday in ArrayUtilities and sorting it (might have new entries)
                 positionToday = findPositionToday(arrayList);
                 arrayList = arrayUtility.sortArrayList(arrayList);
                 int arrayListMaxMonth = positionToday + 30;
                 arrayListSize = arrayList.size();
+                //if the positionToday is far in the back a nullpointer might occur, that's why the maxMonth as it has to get always 30 days
                 if(arrayList.size() >= arrayListMaxMonth){
                     for (int i = positionToday; i < arrayListMaxMonth; i++) {
                         count ++;
@@ -164,6 +162,8 @@ public class Performance extends AppCompatActivity {
                     }
                 }
 
+                //TODO might need fixing because only one date might have been added, but two are being removed
+                //if the original arraylist is changed, entries where added and those need to be removed again
                 if(arrayListSize != arrayListSizeOriginal){
                     arrayList.remove(findEndDatePosition(arrayList));
                     arrayList.remove(findPositionToday(arrayList));
@@ -172,6 +172,7 @@ public class Performance extends AppCompatActivity {
                 break;
             case LAST_WEEK_COUNT:
 
+                //same as MONTH_COUNT just with two positions
                 positionEnd =  findEndDatePosition(arrayList);
                 positionToday = findPositionToday(arrayList);
                 arrayList = arrayUtility.sortArrayList(arrayList);
@@ -189,6 +190,7 @@ public class Performance extends AppCompatActivity {
                 break;
             case CURRENT_COUNT:
 
+                //same as MONTH_COUNT just with two positions
                 positionStartCurrent = findStartPositionGoal(arrayList, goalObject.getEndOfGoal());
                 positionEndCurrent =  findEndPositionGoal(arrayList, goalObject.getStartOfGoal());
                 arrayList = arrayUtility.sortArrayList(arrayList);

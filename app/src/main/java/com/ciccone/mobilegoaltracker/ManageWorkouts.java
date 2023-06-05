@@ -46,9 +46,9 @@ public class ManageWorkouts extends AppCompatActivity {
         //initiating variables
         returnToMain = findViewById(R.id.imgBtnReturnFromWorkouts);
         addWorkout = findViewById(R.id.floatingActionButtonAddWokout);
+        itemList = findViewById(R.id.itemList);
 
 //calling the list from storage and initiating it
-        itemList = findViewById(R.id.itemList);
         try {
 
             if(FileManager.fileExist(context, FILE_NAME)){
@@ -61,24 +61,29 @@ public class ManageWorkouts extends AppCompatActivity {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+        //using an adapter for the listview
         itemsAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, items);
         itemList.setAdapter(itemsAdapter);
 
-        //implementing the return to mainActivity function
+        //implementing the return to mainActivity function via intent
         returnToMain.setOnClickListener(View ->{
             Intent returnToMain = new Intent(ManageWorkouts.this, MainActivity.class);
             startActivity(returnToMain);
         });
 
+        //calling the setupListViewListener
         setupListViewListener();
 
+        //setting up the addWorkout onClickListener that calls addWorkout
         addWorkout.setOnClickListener(view ->{
 
             addWorkout();
         });
     }
-    //Inflating the input_workout.xml, building the alertDialog and getting the input for new Workout; Calling the JSON conversion for saving to storage
+
+    //Inflating the input_name.xml, building the alertDialog and getting the input for new Workout;
+    // Calling the JSON conversion for saving to storage
     private void addWorkout() {
         LayoutInflater li= LayoutInflater.from(this);
         View promptsView = li.inflate(R.layout.input_name, null);
@@ -96,11 +101,11 @@ public class ManageWorkouts extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton("Create",
                         (dialog, id) -> {
-                            // get user input and set it to result
-                            // edit text
-                            // result.setText(userInput.getText());
+                            // itemTxt.setText(userInput.getText());
                             itemTxt = userInput.getText().toString();
                             itemsAdapter.add(itemTxt);
+
+                            //saving the input via JSONConversion and FileManager
                             try {
                                  FileManager.saveToStorage(JsonConversion.convertingToJSON(items), context, FILE_NAME);
                             } catch (JSONException e) {
@@ -111,11 +116,7 @@ public class ManageWorkouts extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         })
                 .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
-                                dialog.cancel();
-                            }
-                        });
+                        (dialog, id) -> dialog.cancel());
 
         // create alert dialog
         AlertDialog alertDialog = alertDialogBuilder.create();
@@ -123,6 +124,7 @@ public class ManageWorkouts extends AppCompatActivity {
         // show it
         alertDialog.show();
     }
+
     // Setting a View Listener for deleting workouts, and converting to JSON for saving to storage
     private void setupListViewListener() {
         itemList.setOnItemLongClickListener(
@@ -137,7 +139,7 @@ public class ManageWorkouts extends AppCompatActivity {
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
-                    //display file saved message
+                    //display file deleted message
                     Toast.makeText(getBaseContext(), "Workout deleted!",
                             Toast.LENGTH_SHORT).show();
                     return true;

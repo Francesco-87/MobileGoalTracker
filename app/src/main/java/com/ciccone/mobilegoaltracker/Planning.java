@@ -140,7 +140,7 @@ public class Planning extends AppCompatActivity  {
                 throw new RuntimeException(e);
             }
 
-        //Creating constrains for the date-range picker and building the MaterialDatePicker for
+        //Creating constrains for the date-range picker and building the MaterialDatePicker
 
         constraintsBuilder = new CalendarConstraints.Builder()
                 .setValidator(DateValidatorPointForward.now())
@@ -164,6 +164,7 @@ public class Planning extends AppCompatActivity  {
 
             today = calendarView.getDate();
 
+            //checking if the default date is selected (before user clicks)
             dateString  = new DateUtility().checkDate(dateYear,dateMonth,dateDay,today);
             updateTextViewCalenderActivity();
 
@@ -173,6 +174,7 @@ public class Planning extends AppCompatActivity  {
 
 
 //TODO implement Toast methods
+            //a switch for the spinner choices each calling upon the selected method.
             switch(spinnerChoice) {
                 case choiceAddWorkout:
 
@@ -192,6 +194,7 @@ public class Planning extends AppCompatActivity  {
                     // code block
             }
         });
+
         //Setting an onItemSelectListener for the spinner and the choice
         spinnerPlanningChoice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -208,7 +211,8 @@ public class Planning extends AppCompatActivity  {
         });
     }
 
-
+    //Inflating the input_name.xml, building the alertDialog and getting the input for new Workout;
+    // Calling the JSON conversion for saving to storage
     private void addWorkout() {
         LayoutInflater li= LayoutInflater.from(this);
         View promptsView = li.inflate(R.layout.input_name, null);
@@ -228,7 +232,7 @@ public class Planning extends AppCompatActivity  {
                             workoutDataList.add(new WorkoutData(dateString, itemTxt));
 
                             workoutDataList = arrayUtility.sortArrayList(workoutDataList);
-                            // save the workoutDataList to a file via Json and filestorage
+                            // save the workoutDataList to a file via Json and FileManager
                             try {
                                 FileManager.saveToStorage(JsonConversion.convertingToJsonArray(workoutDataList, "WorkoutData"), context, FILE_NAME);
                             } catch (JSONException e) {
@@ -249,8 +253,10 @@ public class Planning extends AppCompatActivity  {
     //method to find the date in the arraylist for display in the planningTextView
     private void updateTextViewCalenderActivity(){
 
+        // a default value
         textViewWorkout.setText("No Plans yet");
 
+        //looping through the list to find and set the workout text
     for(int  i=0;i<workoutDataList.size();i++)
         {
             workoutData = (WorkoutData) workoutDataList.get(i);
@@ -273,7 +279,7 @@ public class Planning extends AppCompatActivity  {
         materialDatePicker.addOnPositiveButtonClickListener(
                 selection -> {
 
-                    // if the user clicks on the positive; button that is ok button update the; selected date
+                    // if the user clicks on the positive button, the dates are converted and saved into the goalObject
 
                     String startDate = new DateUtility().convertCalendarDate(materialDatePicker.getSelection().first);
                     String endDate = new DateUtility().convertCalendarDate(materialDatePicker.getSelection().second);
@@ -294,6 +300,7 @@ public class Planning extends AppCompatActivity  {
 
     }
 
+    //similar to the addWorkout method, but calling input_goal.xml
     private void callNameInputGoal() {
         LayoutInflater li= LayoutInflater.from(this);
         View promptsView = li.inflate(R.layout.input_goal, null);
@@ -303,15 +310,18 @@ public class Planning extends AppCompatActivity  {
         //set the prompts.xml to alertdialog builder
         alertDialogBuilder.setView(promptsView);
 
+        //the input_goal.xml has a spinner, initialized her with numbers 1-10
         Spinner spinnerWorkout = promptsView.findViewById(R.id.spinnerWorkout);
         ArrayList arrayList = new ArrayList<Integer>();
-        for (int i = 0; i < 10; i++) {
-            arrayList.add(i+1);
+        for (int i = 1; i <= 10; i++) {
+            arrayList.add(i);
         }
 
+        //the adapter for the spinner, for display
         ArrayAdapter<Integer> spinnerAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, arrayList);
         spinnerWorkout.setAdapter(spinnerAdapter);
 
+        //the onItemSelectedListener for the spinner selection, passes the goalAmount to be set in the list
         spinnerWorkout.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -330,9 +340,7 @@ public class Planning extends AppCompatActivity  {
                 .setCancelable(false)
                 .setPositiveButton("next",
                         (dialog, id) -> {
-                            // get user input and set it to result
-                            // edit text
-                            // result.setText(userInput.getText());
+                    //calling the getGoalDate method as the goalAmount is selected previous in the Spinner
                             getGoalDate();
 
                         })
@@ -358,6 +366,7 @@ public class Planning extends AppCompatActivity  {
 
     }
 
+    //a method to delete a workout and save the list after sorting.
     private void deleteWorkout(){
 
         for(int  i=0;i<workoutDataList.size();i++)

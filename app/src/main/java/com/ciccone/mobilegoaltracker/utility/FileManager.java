@@ -11,13 +11,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-
+// a class for managing files
 public class FileManager  {
 
 
-    static final int READ_BLOCK_SIZE = 100;
+    //the block size is set to 1000, as it is a small app
+    static final int READ_BLOCK_SIZE = 1000;
 
-    // Saving the file in the internal storage with FileOutputStream
+    // Saving the file in the internal storage with FileOutputStream, using the context
     public static void saveToStorage(String s, Context context, String fileName) {
         try{
             FileOutputStream fOut = context.openFileOutput(fileName, Context.MODE_PRIVATE);
@@ -32,12 +33,12 @@ public class FileManager  {
     }
 
 
-    //reading text from file
+    //reading text from file, using the context
     public static String readFromStorage(Context context, String fileName){
 
         //Empty string variable
         String fileContent = "";
-        //trying to read a specific "Workout.txt" file via InputStream and adding it to fileContent with a while loop
+        //trying to read a specific file (fileName) via InputStream and adding it to fileContent with a while loop
         try{
             FileInputStream fIn = context.openFileInput(fileName);
             InputStreamReader inputStreamReader = new InputStreamReader(fIn);
@@ -59,11 +60,13 @@ public class FileManager  {
     }
 
 
+    //a method to check the existence of a file in the internal storage (context)
     public static boolean fileExist(Context context, String filename){
         File file = context.getFileStreamPath(filename);
         return file.exists();
     }
 
+    //a method to delete the existence of a file in the internal storage (context)
     public static boolean fileDelete(Context context, String filename){
         File file = context.getFileStreamPath(filename);
         return file.delete();
