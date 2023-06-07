@@ -33,6 +33,7 @@ class DateUtilityTest {
     long today = System.currentTimeMillis();
     Date dateToday = new Date(today);
 
+    //mocking the classes
     @Mock
     SimpleDateFormat simpleDateFormat;
     @Mock
@@ -41,7 +42,7 @@ class DateUtilityTest {
     private AutoCloseable closeable;
 
 
-
+//setting up the environment before the test
     @BeforeEach
     public void initMocks() throws ParseException {
 
@@ -52,27 +53,25 @@ class DateUtilityTest {
 
         when(mockDate.getTime()).thenReturn(today);
         when(mockDate.toString()).thenReturn("Wed May 31 16:49:59 CEST 2023");
+
+        //testdata output
         System.out.print("mockDATE" + mockDate);
         System.out.print("dateToday" + dateToday);
         System.out.print("TODAY" + today);
+
         simpleDateFormat = mock(SimpleDateFormat.class);
 
         when(simpleDateFormat.parse(any())).thenReturn(mockDate);
 
 
-
-
-
-
-
-
     }
+    //closing the service
     @AfterEach
     void closeService() throws Exception {
         closeable.close();
     }
 
-
+//trying to establish that by calling the convertCalendarDate method the output equals the datestring
     @Test
     void convertCalendarDate() {
 
