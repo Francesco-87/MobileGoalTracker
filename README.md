@@ -14,12 +14,14 @@ Prerequisite:
 2. Make sure you have Java installed
 3. GitHub account
 
+How to test it:
+1. Start a new project (with the download from this repository)
+2. Create a virtual mobile device on the emulator (with the min APK)
+3. Make sure everything is up to date 
+4. Run the Application
 
-4. Start a new project (with the download from this repository)
-5. Create a virtual mobile device on the emulator (with the min APK)
-6. Make sure everything is up to date
-7. Run the Application
 
+Deployment is done via the Google and Android manuals. 
 
 !!! NOTE !!!
 
