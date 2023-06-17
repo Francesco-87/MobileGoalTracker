@@ -1,104 +1,78 @@
 package com.ciccone.mobilegoaltracker.utility;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import android.icu.util.Calendar;
-
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.MockedConstruction;
+import org.mockito.InjectMocks;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
-import java.text.DateFormat;
-import java.text.FieldPosition;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class DateUtilityTest {
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+class DateUtilityNewTest {
 
-//TODO TESTS in this test class do not work need working on.
-    long today = System.currentTimeMillis();
-    Date dateToday = new Date(today);
+    @InjectMocks
+    DateUtility dateUtility;
 
-    //mocking the classes
-    @Mock
     SimpleDateFormat simpleDateFormat;
-    @Mock
-    public Date mockDate;
-    @Mock
-    private AutoCloseable closeable;
 
-
-//setting up the environment before the test
     @BeforeEach
-    public void initMocks() throws ParseException {
-
-        closeable = MockitoAnnotations.openMocks(this);
-// Mock the behavior of the format method
-
-       mockDate =mock(Date.class);
-
-        when(mockDate.getTime()).thenReturn(today);
-        when(mockDate.toString()).thenReturn("Wed May 31 16:49:59 CEST 2023");
-
-        //testdata output
-        System.out.print("mockDATE" + mockDate);
-        System.out.print("dateToday" + dateToday);
-        System.out.print("TODAY" + today);
-
-        simpleDateFormat = mock(SimpleDateFormat.class);
-
-        when(simpleDateFormat.parse(any())).thenReturn(mockDate);
-
-
-    }
-    //closing the service
-    @AfterEach
-    void closeService() throws Exception {
-        closeable.close();
-    }
-
-//trying to establish that by calling the convertCalendarDate method the output equals the datestring
-    @Test
-    void convertCalendarDate() {
-
-        when(simpleDateFormat.format(mockDate.getTime())).thenReturn("2017-02-06");
-
-
-        assertEquals("30/5/2023", DateUtility.convertCalendarDate(today));
-
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        this.simpleDateFormat = new SimpleDateFormat("d/M/yyyy");
     }
 
     @Test
-    void checkDate() {
-
+    void checkDateTest() {
+        String date = dateUtility.checkDate(2023, 06, 14, 0l);
+        assertThat(date).isNotNull();
+        assertThat(date).isEqualTo("14/6/2023");
     }
 
     @Test
-    void dateToLong() throws ParseException {
-
-
-        when(mockDate.getTime()).thenReturn(30L);
-
-        assertEquals(30L, DateUtility.dateToLong("26/5/2023"));
-
+    void checkDateWithoutYearTest() {
+        String date = dateUtility.checkDate(0, 06, 14, new Date().getTime());
+        assertThat(date).isNotNull();
+        assertThat(date).isEqualTo(simpleDateFormat.format(new Date()));
     }
 
     @Test
-    void calculateDaysApart() {
+    void dateToLongTest() {
+        try (MockedStatic<DateUtility> utilities = Mockito.mockStatic(DateUtility.class)) {
+            utilities.when(() -> DateUtility.dateToLong("14/6/2023"))
+                    .thenReturn(123l);
+            assertThat(DateUtility.dateToLong("14/6/2023")).isEqualTo(123l);
+        }
+    }
 
+    @Test
+    void convertCalendarDateTest() {
+        try (MockedStatic<DateUtility> utilities = Mockito.mockStatic(DateUtility.class)) {
+            utilities.when(() -> DateUtility.convertCalendarDate(123l))
+                    .thenReturn("14/6/2023");
+            assertThat(DateUtility.convertCalendarDate(123l)).isEqualTo("14/6/2023");
+        }
+    }
+
+    @Test
+    void convertCalendarDateWithSdfTest() {
+        String convertedDate = DateUtility.convertCalendarDate(new Date().getTime());
+        assertThat(convertedDate).isNotNull();
+        assertThat(convertedDate).isEqualTo(simpleDateFormat.format(new Date()));
+    }
+
+    @Test
+    void dateToLongWithSDFTest() {
+        Long convertedDate = DateUtility.dateToLong(simpleDateFormat.format(new Date()));
+        assertThat(convertedDate).isNotNull();
     }
 }

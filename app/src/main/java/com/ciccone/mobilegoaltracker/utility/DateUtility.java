@@ -1,6 +1,8 @@
 package com.ciccone.mobilegoaltracker.utility;
 
-import android.icu.text.SimpleDateFormat;
+
+import java.text.SimpleDateFormat;
+//import android.icu.text.SimpleDateFormat;
 
 import java.text.ParseException;
 import java.util.Date;
