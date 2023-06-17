@@ -1,11 +1,10 @@
 # MobileGoalTracker
 
 Versions for this app:
+
 Android Studio Flamingo 2022.2.1 | Patch 2
-Compile SDK 33
-Min SDK 29
-Target SDK 33
-Java SDK 19.0.1
+
+Compile SDK 33 | Min SDK 29 | Target SDK 33 | Java SDK 19.0.1
 
 Tested on Pixel 6 API 31 (emulator) 
 
