@@ -94,8 +94,11 @@ public class Performance extends AppCompatActivity {
                 goalObject = (GoalObject) workoutGoal.get(0);
 
                 //setting the progressbar for current to the max days in the goal and setting the goal
-                current.setMax(calculateDaysApart(dateToLong(goalObject.getStartOfGoal()), dateToLong(goalObject.getEndOfGoal()))+1);
-                current.setProgress(countWorkouts(workoutDataList, CURRENT_COUNT));
+
+                    current.setMax(calculateDaysApart(dateToLong(goalObject.getStartOfGoal()), dateToLong(goalObject.getEndOfGoal()))+1);
+                    current.setProgress(countWorkouts(workoutDataList, CURRENT_COUNT));
+
+
 
             } else {
                 workoutGoal = new ArrayList<GoalObject>();
@@ -105,22 +108,25 @@ public class Performance extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
-       //calling the filterArray method to display the last 3 Workouts and setting an adapter
+        //calling the counts and setting the progress in the progress bar
+        lastMonth.setProgress(countWorkouts(workoutDataList, MONTH_COUNT));
+        lastMonth.setMax(30);
+        lastWeek.setProgress(countWorkouts(workoutDataList, LAST_WEEK_COUNT));
+
+        //calling the filterArray method to display the last 3 Workouts and setting an adapter
         lastThreeWorkoutsAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, ArrayUtility.filterArrayList(workoutDataList));
         listLastWorkouts.setAdapter(lastThreeWorkoutsAdapter);
-
-        //calling the counts and setting the progress in the progress bar
-        lastMonth.setProgress(countWorkouts(workoutDataList, MONTH_COUNT));
-        lastWeek.setProgress(countWorkouts(workoutDataList, LAST_WEEK_COUNT));
-
-
 
         //implementing the return to mainActivity function via intent
         returnToMain.setOnClickListener(View ->{
             Intent returnToMain = new Intent(Performance.this, MainActivity.class);
             startActivity(returnToMain);
         });
+
+
+
+
     }
 
 
@@ -150,7 +156,7 @@ public class Performance extends AppCompatActivity {
                 arrayList = arrayUtility.sortArrayList(arrayList);
                 int arrayListMaxMonth = positionToday + 30;
                 arrayListSize = arrayList.size();
-                //if the positionToday is far in the back a nullpointer might occur, that's why the maxMonth as it has to get always 30 days
+                //if the positionToday is far in the back a null pointer might occur, that's why the maxMonth as it has to get always 30 days
                 if(arrayList.size() >= arrayListMaxMonth){
                     for (int i = positionToday; i < arrayListMaxMonth; i++) {
                         count ++;
@@ -161,7 +167,7 @@ public class Performance extends AppCompatActivity {
 
                     }
                 }
-
+                Log.d("DATETODAY", String.valueOf(count));
                 //TODO might need fixing because only one date might have been added, but two are being removed
                 //if the original arraylist is changed, entries where added and those need to be removed again
                 if(arrayListSize != arrayListSizeOriginal){
@@ -189,6 +195,7 @@ public class Performance extends AppCompatActivity {
 
                 break;
             case CURRENT_COUNT:
+
 
                 //same as MONTH_COUNT just with two positions
                 positionStartCurrent = findStartPositionGoal(arrayList, goalObject.getEndOfGoal());

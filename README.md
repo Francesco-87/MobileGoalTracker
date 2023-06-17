@@ -11,10 +11,10 @@ Tested on Pixel 6 API 31 (emulator)
 Prerequisite:
 1. Install Android Studio according to the Android description (Including variables needed)
 2. Make sure you have Java installed
-3. GitHub account
+3. GitHub 
 
 How to test it:
-1. Start a new project (with the download from this repository)
+1. Start a new project (Load from VCS, with the download from this repository)
 2. Create a virtual mobile device on the emulator (with the min APK)
 3. Make sure everything is up to date 
 4. Run the Application

@@ -98,14 +98,13 @@ public class ArrayUtility {
             }
         }
 
-
         return temp;
     }
 
     //finding today's Date in an Arraylist, returning the position
     public static int findPositionToday(@NonNull ArrayList arrayList){
 
-        //positonToday needs to be initializen for the differentiation later on
+        //positionToday needs to be initialized for the differentiation later on
         // it runs a loop to check for the current date
         int positionToday = 2000;
         String today = convertCalendarDate(new Date().getTime());
